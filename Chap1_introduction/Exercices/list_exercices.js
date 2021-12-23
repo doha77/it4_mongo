@@ -39,6 +39,69 @@ db.restaurants.distinct('cuisine', { "borough": "Bronx" });
 // $size calculer la taille de votre tableau 
 
 db.restaurants.find( 
-    { borough: "Bronx", "grades" : { $size : 4} },  
+    { borough: "Bronx", "grades" : { $size : 4 } },  
     { _id : 0, name : 1, "address.coord" : 1} 
 ).pretty();
+
+// 07. Sélectionnez les restaurants dont le grade est A ou B dans le Bronx.
+
+db.restaurants.find({
+    $and: [
+        { "borough": "Bronx" },
+        { "grades.grade": { $in: ["A", "B"] } }
+    ]
+}).count()
+
+db.restaurants.find({
+    $and: [
+        { "borough": "Bronx" },
+        { $or: [{ "grades.grade": "A" }, { "grades.grade": "B" }] }
+    ]
+}).count()
+
+db.restaurants.find({"borough": "Bronx" , "$or": [{ "grades.grade": "A" }, { "grades.grade": "B" }] }).count()
+
+
+// 08. Même question mais, on aimerait récupérer les restaurants qui ont eu à la dernière inspection (elle apparaît théoriquement en premier dans la liste des grades) un A ou B. Vous pouvez utilisez la notion d'indice sur la clé grade :
+
+db.restaurants.find({
+    $and: [
+        {
+            $or: [{ "grades.0.grade": "A" }, { "grades.0.grade": "B" }]
+        },
+        {
+            "borough": "Bronx"
+        }
+    ]
+},
+    { "_id": 0, "name": 1, grades: 1 }
+).pretty();
+
+
+// 09. Sélectionnez maintenant tous les restaurants qui ont le mot "Coffee" ou "coffee" dans la propriété name du document. Puis, même question mais uniquement dans le quartier du Bronx.
+
+db.restaurants.find({ name: /coffee/ }, { _id: 0, name: 1 }).count()
+db.restaurants.find({ name: /Coffee/ }, { _id: 0, name: 1 }).count()
+
+db.restaurants.find({ name: /[Cc]offee/ }, { _id: 0, name: 1 }).count()
+
+// On en ajoute un qui permet de voir qu'on les compte tous
+db.restaurants.updateOne(
+    { 'name': /Coffee/ },
+    [
+        { $set: { name: "coffee" } }
+    ]
+);
+
+// 10, 11 TODO
+
+// 12
+
+// Rmq
+/**
+ * On sait que l'on a des restaurants qui ont tous 4 grades, inspirez vous de l'exemple de code suivant pour mettre en page
+ */
+
+db.restaurants.find( {name : /[Cc]offee/ } ).forEach( doc => {
+    print(doc.name.toUpperCase())
+})
