@@ -281,7 +281,7 @@ $gt, $gte;
 // Plus petit que
 $lt, $lte;
 
-// collection inventory  quantité < 10
+// collection inventory  quantité < 20
 db.inventory.find({ quantity: { $lt: 20 } });
 ```
 
@@ -371,13 +371,7 @@ MongoDB utilise Perl compatible regular expressions (i.e. "PCRE" ) version 8.42 
 db.collection.findOne(query, restriction).sort({ key: 1 }); // 1 pour ordre croissant et -1 pour décroissant
 ```
 
-### 02. Quels sont les restaurants qui ont eu un grade A avec un score supérieur ou égal à 20 en même temps ? 
-
-Utilisez la syntaxe suivante pour faire cette requête, elemMatch vérifie la concordance du filtrage sur des sous-document.
-
-```js
-{ "content": { $elemMatch: { "name": "Turing Award", "year": { $gt: 1980 } } } }
-```
+### 02. Quels sont les restaurants qui ont eu un grade A avec un score supérieur ou égal à 20  ? 
 
 Affichez uniquement les noms et ordonnez les par ordre décroissant. Affichez le nombre de résultat.
 
