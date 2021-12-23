@@ -93,7 +93,61 @@ db.restaurants.updateOne(
     ]
 );
 
-// 10, 11 TODO
+// 10 
+
+
+// (P1) AND (P2 )
+// (SP1 OU SP2) AND P2
+db.restaurants.find({
+    $and: [
+        { "name": { $in: [/Coffee/, /Restaurant/] } },
+        { "name": { $nin: [/Starbucks/] } } 
+    ]
+}, { "_id": 0, "name": 1 }).count()
+
+// voir l'exemple suivant dans la documentation avec qty https://docs.mongodb.com/manual/reference/operator/query/and/
+db.restaurants.find({
+    $and: [
+        { $or  : [{name : /Coffee/}, { name : /Restaurant/ }] },
+        { "name": { $nin: [/Starbucks/] } } 
+    ]
+}, { "_id": 0, "name": 1 }).count()
+
+
+// name
+// SP1 OU (SP2 AND P2) ATTENTION à l'interprétation de la requête suivante 
+db.restaurants.find(
+    {$or: [{ "name": /Coffee/ }, { "name": /Restaurant/ }]},
+    { "name": { $nin: [/Starbucks/] } } 
+    ).count();
+
+// C'est la meme chose que celle-ci 
+db.restaurants.find({
+    $or : [
+        { "name": /Coffee/i }, 
+        { $and : [
+            { "name": /Restaurant/ },
+            { "name": { $nin: [/Starbucks/] } } 
+        ]}
+    ]
+}).count();
+
+
+// 11
+
+db.restaurants.find({
+    $and: [
+        {
+            $or: [{ borough: "Bronx" }, { borough: "Brooklyn" }]
+        },
+        {
+            name: /coffee/i
+        },
+        { "grades": { "$size": 4 } }
+    ]
+},
+    { "_id": 0, "name": 1, grades: 1 }
+).pretty()
 
 // 12
 
