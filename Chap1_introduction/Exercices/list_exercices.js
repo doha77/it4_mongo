@@ -33,3 +33,12 @@ db.restaurants.distinct('borough');
 // 05 Trouvez tous les types de restaurants dans le quartiers du Bronx. Vous pouvez là encore utiliser distinct et un deuxième paramètre pour préciser sur quel ensemble vous voulez appliquer cette close.
 
 db.restaurants.distinct('cuisine', { "borough": "Bronx" });
+
+//  06 Trouvez tous les restaurants dans le quartier du Bronx qui ont eu 4 grades.
+
+// $size calculer la taille de votre tableau 
+
+db.restaurants.find( 
+    { borough: "Bronx", "grades" : { $size : 4} },  
+    { _id : 0, name : 1, "address.coord" : 1} 
+).pretty();
