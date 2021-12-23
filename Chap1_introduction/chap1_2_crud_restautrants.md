@@ -281,7 +281,7 @@ $gt, $gte;
 // Plus petit que
 $lt, $lte;
 
-// collection inventory  quantité < 10
+// collection inventory  quantité < 20
 db.inventory.find({ quantity: { $lt: 20 } });
 ```
 
