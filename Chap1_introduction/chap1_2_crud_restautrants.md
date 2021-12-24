@@ -371,12 +371,7 @@ MongoDB utilise Perl compatible regular expressions (i.e. "PCRE" ) version 8.42 
 db.collection.findOne(query, restriction).sort({ key: 1 }); // 1 pour ordre croissant et -1 pour décroissant
 ```
 
-### 02. Quels sont les restaurants qui ont eu un grade A avec un score supérieur ou égal à 20  ? 
-
-Affichez uniquement les noms et ordonnez les par ordre décroissant. Affichez le nombre de résultat.
-
-
-### 03. Quels sont les restaurants qui ont eu un grade A et un score supérieur ou égal à 20 ? Affichez uniquement les noms et ordonnez les par ordre décroissant. Affichez le nombre de résultat.
+### 02 03. Quels sont les restaurants qui ont eu un grade A et un score supérieur ou égal à 20 ? Affichez uniquement les noms et ordonnez les par ordre décroissant. Affichez le nombre de résultat.
 
 Remarque pour la dernière partie de la question utilisez la méthode count :
 
@@ -508,6 +503,11 @@ Dans le terminal vous pouvez utiliser la commande it pour avancer dans la lectur
 ```js
 const resCursor1 = db.restaurants.find();
 
+while (resCursor1.hasNext()) {
+  print(tojson(resCursor1.next()));
+}
+
+// n'affichera rien car il n'y a plus rien dans la pile elle a été vidé dans la première boucle
 while (resCursor1.hasNext()) {
   print(tojson(resCursor1.next()));
 }
