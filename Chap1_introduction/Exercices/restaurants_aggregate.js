@@ -62,3 +62,13 @@ db.restaurants.aggregate([
 ]);
 
 // Exercice donnez le nombre de restaurant(s) par type de cuisine à NY
+
+db.restaurants.aggregate([
+    {
+        $group: {
+            _id: "$cuisine", total: { $sum: 1 }
+        }
+    }
+]);
+
+// Exercice donnez le nombre de restaurant(s) dans le quartier de Brooklyn
