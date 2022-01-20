@@ -35,16 +35,3 @@ db.sales.aggregate(
     ]
 )
 
-// 03
-db.restaurants.aggregate([
-    {
-        $group: {
-            _id: {
-                "cuisine": "$cuisine",
-                "borough": "$borough"
-            },
-            names: { $push: { name: "$name", restaurant_id: "$restaurant_id" } }
-        },
-    },
-    { $limit: 2 }
-])
