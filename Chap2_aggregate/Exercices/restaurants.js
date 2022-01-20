@@ -26,7 +26,6 @@ db.restaurants.aggregate([
 ]).pretty()
 
 // 05
-
 // db.restaurants.aggregate([
 //     { $unwind: "$grades" },
 //     { $sort : { name : -1 }}
@@ -35,8 +34,43 @@ db.restaurants.aggregate([
 // 05
 db.restaurants.aggregate([
     { $unwind: "$grades" },
-    {$group : { _id :"$name" , avg_by_restaurant: { $avg: "$grades.score" } }},
-    { $sort : { avg_by_restaurant : -1 }}
+    { $group: { _id: "$name", avg_by_restaurant: { $avg: "$grades.score" } } },
+    { $sort: { avg_by_restaurant: -1 } }
 ]).pretty()
 
 // si on considére la question 04 (regardez si vous avez le courage ...)
+// Moyenne des scores par restaurants
+db.restaurants.aggregate([
+    { $unwind: "$grades" },
+    {
+        $group: {
+            _id: {
+                "name": "$name"
+            },
+            avg: { $avg: "$grades.score" }
+        }
+    },
+    {
+        $sort: {
+            avg: -1
+        }
+    },
+])
+
+// Moyenne des scores par quartier
+db.restaurants.aggregate([
+    { $unwind: "$grades" },
+    {
+        $group: {
+            _id: {
+                "borough": "$borough"
+            },
+            avg: { $avg: "$grades.score" }
+        }
+    },
+    {
+        $sort: {
+            avg: -1
+        }
+    }
+])
