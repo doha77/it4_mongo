@@ -44,6 +44,9 @@ db.restaurants.aggregate([
         }
     }
 ])
+
+// avec find on aurait
+db.restaurants.find( {  "grades.grade" : "A" } , {   "name" : 1, "_id" : 0 } )
 ```
 
 Avec le framework d'agrégation de MongoDB vous pouvez faire autant de sous-requêtes que vous souhaitez, dans l'ordre que vous voulez modulo l'ordre match/project.
