@@ -74,3 +74,22 @@ db.restaurants.aggregate([
         }
     }
 ])
+
+// 06 
+db.restaurants.aggregate([
+    { $unwind: "$grades" },
+    { $match: { cuisine: "Italian" } },
+    {
+        $group: {
+            _id: {
+                "name": "$name"
+            },
+
+            avg: { $avg: "$grades.score" },
+        },
+
+    },
+    { $sort: { avg: - 1 } },
+    { $limit: 5 },
+    { $out: "top5" }
+]).pretty();
