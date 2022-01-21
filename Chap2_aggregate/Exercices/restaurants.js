@@ -115,23 +115,67 @@ db.restaurants.aggregate([
 
 // Quelques remarques sur l'agrégation avec MongoDB
 db.restaurants.aggregate([
-    { $group : {
-        _id : "$borough",
-        totalRestaurant : { $sum: 1}
-    }}
+    {
+        $group: {
+            _id: "$borough",
+            totalRestaurant: { $sum: 1 }
+        }
+    }
 ]);
 
 // Attention à l'enchainement des pipes
 db.restaurants.aggregate([
-    { $group : {
-        _id : "$borough",
-        totalRestaurant : {$sum : 1},
-        typeCuisine : { $addToSet: "$cuisine"}
-    }},
-    { $match: { totalRestaurant : { $lte: 51 } } },
+    {
+        $group: {
+            _id: "$borough",
+            totalRestaurant: { $sum: 1 },
+            typeCuisine: { $addToSet: "$cuisine" }
+        }
+    },
+    { $match: { totalRestaurant: { $lte: 51 } } },
     {
         $sort: {
             totalRestaurant: -1
         }
     },
 ]).pretty()
+
+
+db.restaurants.aggregate([
+    { $match: { "grades.score": { $gte: 30 } } },
+    {
+        $group: {
+            _id: "$borough",
+            totalRestaurant: { $sum: 1 },
+            cuisines: { $addToSet: "$cuisine" }
+        }
+    },
+    {
+        $sort: {
+            totalRestaurant: -1
+        }
+    }
+])
+
+db.restaurants.aggregate([
+    { $match: { "grades.score": { $gte: 30 } } },
+    {
+        $group: {
+            _id: "$borough",
+            totalRestaurant: { $sum: 1 },
+            typeCuisine: { $addToSet: "$cuisine" }
+        }
+    },
+    {
+        $sort: {
+            totalRestaurant: -1
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            totalRestaurant: 1,
+            totalTypeCuise: { $size: "$typeCuisine" }
+        }
+    }
+])
