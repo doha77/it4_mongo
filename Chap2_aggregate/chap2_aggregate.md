@@ -228,30 +228,4 @@ Par exemple pour Manhattan vous devriez avoir le résultat suivant :
 { "_id" : "Manhattan", "totalRestaurant" : 884, "totalCuisine" : 59 }
 ```
 
-## Lookup pour faire une jointure
 
-
-Ajoutez la collection borough elle indique le nombre de personnes par quartier :
-
-```js
-db.borough.insertMany([
-    { _id : "Manhattan", population : 1537195},
-    { _id : "Brooklyn", population : 2465326},
-    { _id : "Queens", population : 2229379},
-    { _id : "Bronx", population : 1332650},
-    { _id : "Staten Island", population : 443728}
-])
-```
-
-### Exercice lookup
-
-Faites une jointure avec la collection borough pour récupérer par quartier les informations sur sa population.
-
-
-## Exercice tree structure Algorithmique 
-
-Travaillez sur la collection **categoriestree** dans la base de données **bookstore**.
-
-1. Framework d'aggregation ajoutez une propriété total qui calcul le nombre de livres par document
-
-2. Affichez le nom de la catégorie ayant le plus de livres ainsi que les livres.
