@@ -228,4 +228,4 @@ Par exemple pour Manhattan vous devriez avoir le résultat suivant :
 { "_id" : "Manhattan", "totalRestaurant" : 884, "totalCuisine" : 59 }
 ```
 
-
+- 9 Cherchez les meilleurs restaurants en proposant une requête de votre choix, faites le par quartier. Puis donnez la moyenne des scores de ces restaurants.
