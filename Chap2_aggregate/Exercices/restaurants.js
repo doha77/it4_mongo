@@ -140,7 +140,7 @@ db.restaurants.aggregate([
     },
 ]).pretty()
 
-
+// Avec le not on récupère uniquement les valeurs qui sont >= 30 sur toutes les notations
 db.restaurants.aggregate([
     { $match: { "grades.score": { $gte: 30 } } },
     {
@@ -157,25 +157,27 @@ db.restaurants.aggregate([
     }
 ])
 
+
+
+// 09 notre correction rmq on prendra garde de ne pas récupérer les scores null
 db.restaurants.aggregate([
-    { $match: { "grades.score": { $gte: 30 } } },
+    { $unwind: "$grades" },
+    { $match: { "grades.score": { $exists: true }, "grades.score": { $not: { $lt: 30 } } } },
     {
         $group: {
-            _id: "$borough",
-            totalRestaurant: { $sum: 1 },
-            typeCuisine: { $addToSet: "$cuisine" }
-        }
+            _id: {
+                "borough": "$borough"
+            },
+            names: {
+                $push: {
+                    name: "$name",
+                    avg: {
+                        $avg: "$grades.score"
+                    },
+                }
+            },
+        },
     },
-    {
-        $sort: {
-            totalRestaurant: -1
-        }
-    },
-    {
-        $project: {
-            _id: 1,
-            totalRestaurant: 1,
-            totalTypeCuise: { $size: "$typeCuisine" }
-        }
-    }
-])
+    { $project: { _id: 1, names: 1 } },
+    { $sort: { "grades.score": - 1 } }
+]).pretty()
