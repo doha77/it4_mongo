@@ -93,3 +93,45 @@ db.restaurants.aggregate([
     { $limit: 5 },
     { $out: "top5" }
 ]).pretty();
+
+// 07 Correction
+db.restaurants.aggregate([
+    // les restaurants qui ont un score au moins supérieur à 30 identique à un WHERE en MySQL
+    { $match: { "grades.score": { $gte: 30 } } },
+    {
+        $group: {
+            _id: "$borough",// agrégation des données par quartier => crée des sous-ensemble
+            totalRestaurant: { $sum: 1 }, // fonction agrégation sur les sous-ensembles
+            cuisines: { $addToSet: "$cuisine" } // ajouter dans un tableau de manière unique chaque type de restaurants
+            // cuisines : { $push : "$cuisne" } // on aurait dans ce cas eu des doublons de type 
+        }
+    },
+    {
+        $sort: {
+            totalRestaurant: -1
+        }
+    }
+])
+
+// Quelques remarques sur l'agrégation avec MongoDB
+db.restaurants.aggregate([
+    { $group : {
+        _id : "$borough",
+        totalRestaurant : { $sum: 1}
+    }}
+]);
+
+// Attention à l'enchainement des pipes
+db.restaurants.aggregate([
+    { $group : {
+        _id : "$borough",
+        totalRestaurant : {$sum : 1},
+        typeCuisine : { $addToSet: "$cuisine"}
+    }},
+    { $match: { totalRestaurant : { $lte: 51 } } },
+    {
+        $sort: {
+            totalRestaurant: -1
+        }
+    },
+]).pretty()
